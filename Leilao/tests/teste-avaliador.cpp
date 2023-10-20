@@ -1,7 +1,9 @@
+#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
+#include "catch.hpp"
 #include "Avaliador.hpp"
 #include <iostream>
 
-int main(){
+/*int main(){
     //Arrange - Given
     Lance primeiroLance(Usuario("Thaynara"), 1000);
     Lance segundoLance(Usuario("Patricia"), 2000);
@@ -23,4 +25,5 @@ int main(){
         std::cout<<"Teste NOK"<<std::endl;
     }
     return 0;
-}
+}*/
+
