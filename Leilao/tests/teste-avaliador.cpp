@@ -3,11 +3,11 @@
 #include "Avaliador.hpp"
 #include <iostream>
 
-/*int main(){
+TEST_CASE("Deve recuperar maior lance de leilão em ordem crescente"){
     //Arrange - Given
-    Lance primeiroLance(Usuario("Thaynara"), 1000);
-    Lance segundoLance(Usuario("Patricia"), 2000);
-    Leilao leilao("Fiat 147 10Km");
+    Lance primeiroLance(Usuario("Thaynara"),1000);
+    Lance segundoLance(Usuario("Patricia"),2000);
+    Leilao leilao("Fiat 147 10KM");
     leilao.recebeLance(primeiroLance);
     leilao.recebeLance(segundoLance);
 
@@ -16,14 +16,25 @@
     //Act - When
     leiloeiro.avalia(leilao);
 
-    //Assert -Then
-    float valorEsperado = 2000;
-    if (valorEsperado == leiloeiro.recuperaMaiorValor())
-    {
-        std::cout<<"Teste OK"<<std::endl;
-    }else{
-        std::cout<<"Teste NOK"<<std::endl;
-    }
-    return 0;
-}*/
+    //Assert - Then
+    REQUIRE(2000 == leiloeiro.recuperaMaiorValor());
+}
+
+TEST_CASE("Deve recuperar maior lance de leilão em ordem decrescente"){
+    //Arrange - Given
+    Lance primeiroLance(Usuario("Thaynara"),2000);
+    Lance segundoLance(Usuario("Patricia"),1000);
+    Leilao leilao("Fiat 147 10KM");
+    leilao.recebeLance(primeiroLance);
+    leilao.recebeLance(segundoLance);
+
+    Avaliador leiloeiro;
+
+    //Act - When
+    leiloeiro.avalia(leilao);
+
+    //Assert - Then
+    REQUIRE(2000 == leiloeiro.recuperaMaiorValor());
+}
+
 
