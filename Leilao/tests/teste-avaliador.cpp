@@ -3,13 +3,29 @@
 #include "Avaliador.hpp"
 #include <iostream>
 
-TEST_CASE("Deve recuperar maior lance de leilão em ordem crescente"){
-    //Arrange - Given
+Leilao emOrdemCrescente(){
     Lance primeiroLance(Usuario("Thaynara"),1000);
     Lance segundoLance(Usuario("Patricia"),2000);
     Leilao leilao("Fiat 147 10KM");
     leilao.recebeLance(primeiroLance);
     leilao.recebeLance(segundoLance);
+
+    return leilao;
+}
+
+Leilao emOrdemDecrescente(){
+    Lance primeiroLance(Usuario("Thaynara"),2000);
+    Lance segundoLance(Usuario("Patricia"),1000);
+    Leilao leilao("Fiat 147 10KM");
+    leilao.recebeLance(primeiroLance);
+    leilao.recebeLance(segundoLance);
+
+    return leilao;
+}
+
+TEST_CASE("Deve recuperar maior lance de leilão em ordem crescente"){
+    //Arrange - Given
+    Leilao leilao = emOrdemCrescente();
 
     Avaliador leiloeiro;
 
@@ -22,11 +38,7 @@ TEST_CASE("Deve recuperar maior lance de leilão em ordem crescente"){
 
 TEST_CASE("Deve recuperar maior lance de leilão em ordem decrescente"){
     //Arrange - Given
-    Lance primeiroLance(Usuario("Thaynara"),2000);
-    Lance segundoLance(Usuario("Patricia"),1000);
-    Leilao leilao("Fiat 147 10KM");
-    leilao.recebeLance(primeiroLance);
-    leilao.recebeLance(segundoLance);
+    Leilao leilao = emOrdemDecrescente();
 
     Avaliador leiloeiro;
 
@@ -39,11 +51,7 @@ TEST_CASE("Deve recuperar maior lance de leilão em ordem decrescente"){
 
 TEST_CASE("Deve recuperar menor lance de leilão em ordem decrescente"){
     //Arrange - Given
-    Lance primeiroLance(Usuario("Thaynara"),2000);
-    Lance segundoLance(Usuario("Patricia"),1000);
-    Leilao leilao("Fiat 147 10KM");
-    leilao.recebeLance(primeiroLance);
-    leilao.recebeLance(segundoLance);
+    Leilao leilao = emOrdemDecrescente();
 
     Avaliador leiloeiro;
 
