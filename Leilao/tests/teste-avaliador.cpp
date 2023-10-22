@@ -1,88 +1,74 @@
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
+#define CATCH_CONFIG_MAIN
 #include "catch.hpp"
 #include "Avaliador.hpp"
-#include <iostream>
 
-Leilao emOrdemCrescente(){
-    Lance primeiroLance(Usuario("Thaynara"),1000);
-    Lance segundoLance(Usuario("Patricia"),2000);
-    Leilao leilao("Fiat 147 10KM");
+Leilao emOrdemCrescente()
+{
+    Lance primeiroLance(Usuario("Thaynara"), 1000);
+    Lance segundoLance(Usuario("Patricia"), 2000);
+    Leilao leilao("Fiat 147 0Km");
     leilao.recebeLance(primeiroLance);
     leilao.recebeLance(segundoLance);
-
+    
     return leilao;
 }
 
-Leilao emOrdemDecrescente(){
-    Lance primeiroLance(Usuario("Thaynara"),2000);
-    Lance segundoLance(Usuario("Patricia"),1000);
-    Leilao leilao("Fiat 147 10KM");
+Leilao emOrdemDecrescente()
+{
+    Lance primeiroLance(Usuario("Thaynara"), 2000);
+    Lance segundoLance(Usuario("Patricia"), 1000);
+    Leilao leilao("Fiat 147 0Km");
     leilao.recebeLance(primeiroLance);
     leilao.recebeLance(segundoLance);
-
+    
     return leilao;
 }
 
-TEST_CASE("Deve recuperar maior lance de leilão em ordem crescente"){
-    //Arrange - Given
-    Leilao leilao = emOrdemCrescente();
-
+TEST_CASE("Avaliador") {
+    // Arrange - Given
     Avaliador leiloeiro;
+    
+    SECTION("Leilões ordenados") {
+        Leilao leilao = GENERATE(emOrdemCrescente(), emOrdemDecrescente());
 
-    //Act - When
-    leiloeiro.avalia(leilao);
+        SECTION("Deve recuperar maior lance de leilão") {
+            // Act - When
+            leiloeiro.avalia(leilao);
 
-    //Assert - Then
-    REQUIRE(2000 == leiloeiro.recuperaMaiorValor());
-}
+            // Assert - Then
+            REQUIRE(2000 == leiloeiro.recuperaMaiorValor());
+        }
 
-TEST_CASE("Deve recuperar maior lance de leilão em ordem decrescente"){
-    //Arrange - Given
-    Leilao leilao = emOrdemDecrescente();
+        SECTION("Deve recuperar menor lance de leilão") {
+            // Act - When
+            leiloeiro.avalia(leilao);
 
-    Avaliador leiloeiro;
+            // Assert - Then
+            REQUIRE(1000 == leiloeiro.recuperaMenorValor());
+        }
+    }
 
-    //Act - When
-    leiloeiro.avalia(leilao);
+    SECTION("Deve recuperar os 3 maiores lances") {
+        // Arrange - Given
+        Lance primeiroLance(Usuario("Thaynara"), 1000);
+        Lance segundoLance(Usuario("Patricia"), 2000);
+        Lance terceiroLance(Usuario("Artur"), 1500);
+        Lance quartoLance(Usuario("Anonimo"), 2500);
+        
+        Leilao leilao("Fiat 147 0Km");
+        leilao.recebeLance(primeiroLance);
+        leilao.recebeLance(segundoLance);
+        leilao.recebeLance(terceiroLance);
+        leilao.recebeLance(quartoLance);
 
-    //Assert - Then
-    REQUIRE(2000 == leiloeiro.recuperaMaiorValor());
-}
+        // Act - When
+        leiloeiro.avalia(leilao);
 
-TEST_CASE("Deve recuperar menor lance de leilão em ordem decrescente"){
-    //Arrange - Given
-    Leilao leilao = emOrdemDecrescente();
-
-    Avaliador leiloeiro;
-
-    //Act - When
-    leiloeiro.avalia(leilao);
-
-    //Assert - Then
-    REQUIRE(1000 == leiloeiro.recuperaMenorValor());
-}
-
-TEST_CASE("Deve recuperar os três maiores lances"){
-    //Arrange - Given
-    Lance primeiroLance(Usuario("Thaynara"),2000);
-    Lance segundoLance(Usuario("Patricia"),1000);
-    Lance terceiroLance(Usuario("Artur"),4000);
-    Lance quartoLance(Usuario("Aika"),1500);
-    Leilao leilao("Fiat 147 10KM");
-    leilao.recebeLance(primeiroLance);
-    leilao.recebeLance(segundoLance);
-    leilao.recebeLance(terceiroLance);
-    leilao.recebeLance(quartoLance);
-
-    Avaliador leiloeiro;
-
-    //Act - When
-    leiloeiro.avalia(leilao);
-
-    //Assert - Then
-    std::vector<Lance> maioresTresLances = leiloeiro.recuperaMaioresTresLances();
-    REQUIRE(3 == maioresTresLances.size());
-    REQUIRE(4000 == maioresTresLances[0].recuperaValor());
-    REQUIRE(2000 == maioresTresLances[1].recuperaValor());
-    REQUIRE(1500 == maioresTresLances[2].recuperaValor());
+        // Assert - Then
+        auto maiores3Lances = leiloeiro.recuperaMaioresTresLances();
+        REQUIRE(3 == maiores3Lances.size());
+        REQUIRE(2500 == maiores3Lances[0].recuperaValor());
+        REQUIRE(2000 == maiores3Lances[1].recuperaValor());
+        REQUIRE(1500 == maiores3Lances[2].recuperaValor());
+    }
 }
