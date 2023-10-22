@@ -53,3 +53,28 @@ TEST_CASE("Deve recuperar menor lance de leilão em ordem decrescente"){
     //Assert - Then
     REQUIRE(1000 == leiloeiro.recuperaMenorValor());
 }
+
+TEST_CASE("Deve recuperar os três maiores lances"){
+    //Arrange - Given
+    Lance primeiroLance(Usuario("Thaynara"),2000);
+    Lance segundoLance(Usuario("Patricia"),1000);
+    Lance terceiroLance(Usuario("Artur"),4000);
+    Lance quartoLance(Usuario("Aika"),1500);
+    Leilao leilao("Fiat 147 10KM");
+    leilao.recebeLance(primeiroLance);
+    leilao.recebeLance(segundoLance);
+    leilao.recebeLance(terceiroLance);
+    leilao.recebeLance(quartoLance);
+
+    Avaliador leiloeiro;
+
+    //Act - When
+    leiloeiro.avalia(leilao);
+
+    //Assert - Then
+    std::vector<Lance> maioresTresLances = leiloeiro.recuperaMaioresTresLances();
+    REQUIRE(3 == maioresTresLances.size());
+    REQUIRE(4000 == maioresTresLances[0].recuperaValor());
+    REQUIRE(2000 == maioresTresLances[1].recuperaValor());
+    REQUIRE(1500 == maioresTresLances[2].recuperaValor());
+}
